@@ -4,6 +4,7 @@ type MainFilmInfoProp = {
   year: number;
 }
 
+
 function MainFilmCard({title, genre, year}: MainFilmInfoProp) : JSX.Element {
   return (
     <section className="film-card">
