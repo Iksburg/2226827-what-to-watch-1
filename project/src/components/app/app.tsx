@@ -1,79 +1,51 @@
-import AddReviewPage from '../../pages/add-review-page/add-review-page';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import AuthorizationPage from '../../pages/authorization-page/authorization-page';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Films } from '../../types/films';
+//import HeadGuest from '../../pages/head-guest/head-guest';
 import MainPage from '../../pages/main-page/main-page';
-import FilmPage from '../../pages/film-page/film-page';
-import MyListPage from '../../pages/my-list-page/my-list-page';
-import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import PlayerPage from '../../pages/player-page/player-page';
+//import MovieDetails from '../../pages/movie-details/movie-details';
+//import MovieInMyList from '../../pages/movie-in-list/movie-in-list';
+import MoviePage from '../../pages/movie-page/movie-page';
+import MovieReviews from '../../pages/movie-reviews/movie-reviews';
+import Player from '../../pages/player/player';
+//import PlayerPause from '../../pages/player-pause/player-pause';
+import SignIn from '../../pages/sign-in/sign-in';
+//import SignInMess from '../../pages/sign-in-mess/sign-in-mess';
+import Page404 from '../../pages/404page/404page';
 import PrivateRoute from '../private-route/private-route';
-import { Reviews } from '../../types/reviews';
+import React from 'react';
+import {BrowserRouter, Route, Routes,} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus} from '../../consts';
+import MyList from '../../pages/my-list/my-list';
+import {Film} from '../../types/types';
+import AddReview from '../../pages/add-review/add-review';
+import MovieDetails from '../../pages/movie-details/movie-details';
 
-
-type MainPageProp = {
-  films: Films[];
-  reviews: Reviews[];
-  myFilms: Films[];
+const FilmData = {
+  FILM_TITLE: 'The Grand Budapest Hotel',
+  FILM_GENRE: 'Drama',
+  FILM_YEAR: '2014',
+};
+type AppScreenProps = {
+  films: Film[];
 }
 
-
-function App({films, reviews, myFilms}: MainPageProp): JSX.Element {
+function App(films:AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path={AppRoute.Main}
-          element = {
-            <MainPage
-              films={films}
-              myFilms={myFilms}
-            />
-          }
-        />
-        <Route
-          path={AppRoute.SignIn}
-          element={<AuthorizationPage />}
-        />
-        <Route
-          path={AppRoute.Film}
-          element={<FilmPage films={films} myFilms={myFilms} />}
-        />
-        <Route
-          path={AppRoute.MyList}
-          element={
-            <PrivateRoute
-              authorizationStatus={AuthorizationStatus.Auth}
-            >
-              <MyListPage
-                myFilms={myFilms}
-              />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={AppRoute.AddReview}
-          element={
-            <PrivateRoute
-              authorizationStatus={AuthorizationStatus.Auth}
-            >
-              <AddReviewPage films={films} />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={AppRoute.Player}
-          element={<PlayerPage films={films}/>}
-        />
-        <Route
-          path="*"
-          element={<NotFoundPage />}
-        />
+        <Route path={AppRoute.Main}>
+          <Route index element={<MainPage filmName = {FilmData.FILM_TITLE} filmGenre = {FilmData.FILM_GENRE} filmReleaseDate = {FilmData.FILM_YEAR} films={films.films} />}/>
+          {/*<Route path={'test'} element={<MovieReviews />}/>*/}
+          <Route path={AppRoute.SignIn} element={<SignIn/>}/>
+          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={AuthorizationStatus.Auth}><MyList myFilms={films.films}/></PrivateRoute>}/>
+          <Route path={AppRoute.Film} element={<MoviePage films={films.films}/>}/>
+          <Route path={AppRoute.Review} element={<MovieReviews films={films.films} />}/>
+          <Route path={AppRoute.AddReview} element={<AddReview/>}/>
+          <Route path={AppRoute.FilmDetails} element={<MovieDetails films={films.films}/>}/>
+          <Route path={AppRoute.Player} element={<Player/>}/>
+        </Route>
+        <Route path={'*'} element={<Page404/>}/>
       </Routes>
-    </BrowserRouter>
-  );
+    </BrowserRouter>);
+  /*<MainPage filmName = {FilmData.FILM_TITLE} filmGenre = {FilmData.FILM_GENRE} filmRealeseDate = {FilmData.FILM_YEAR} />*/
 }
-
 
 export default App;
