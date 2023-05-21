@@ -11,16 +11,16 @@ type MainFilmCardProp = {
 
 function Main({title, genre, year}: MainFilmCardProp): JSX.Element {
   return (
-    // <html lang="en">
-    //   <head>
-    //     <meta charSet="UTF-8"></meta>
-    //     <title>WTW</title>
-    //     <meta name="robots" content="noindex, nofollow"/>
-    //     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    //     <link rel="stylesheet" href="css/main.min.css"/>
-    //   </head>
+  // <html lang="en">
+  //   <head>
+  //     <meta charSet="UTF-8"></meta>
+  //     <title>WTW</title>
+  //     <meta name="robots" content="noindex, nofollow"/>
+  //     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  //     <link rel="stylesheet" href="css/main.min.css"/>
+  //   </head>
 
-    //   <body>
+  //   <body>
 
     //     <div className="visually-hidden">
     //       {/* // <!-- inject:svg -->  */}
