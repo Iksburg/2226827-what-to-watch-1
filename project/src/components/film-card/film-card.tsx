@@ -1,36 +1,42 @@
-import {Film} from '../../types/types';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Video} from '../video/video';
+
+import {Player} from '../player/player';
+
+import FilmType from '../../types/film-type';
 
 type FilmCardProps = {
-  film: Film;
-}
+  film: FilmType;
+  setActiveFilmCard: (id: number) => void;
+  isActive: boolean;
+};
 
-export default function FilmCard ({film}:FilmCardProps): JSX.Element{
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isActive, setActive] = useState(false);
-  let timerId: NodeJS.Timeout;
+export const FilmCard = (props: FilmCardProps): JSX.Element => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  useEffect(() => {
+    if (props.isActive) {
+      const timer = setTimeout(() => setIsPlaying(true), 1000);
+      return () => {
+        clearTimeout(timer);
+        setIsPlaying(false);
+      };
+    }
+  }, [props.isActive]);
 
   return (
-    <article className="small-film-card catalog__films-card"
-      onMouseOver={()=>{
-        timerId = setTimeout(()=>{
-          setActive(true);
-        }, 1000);}}
-      onMouseOut={()=>{
-        clearTimeout(timerId);
-        setActive(false);
-      }}
+    <article
+      className="small-film-card catalog__films-card"
+      onMouseEnter={() => props.setActiveFilmCard(props.film.id)}
+      onMouseLeave={() => props.setActiveFilmCard(NaN)}
     >
-      {(isActive && <Video src={film.prevVideoLink} isMuted posterIMG={film.posterImage}/>) ||
-      <>
-        <div className="small-film-card__image">
-          <img src={film.prevImage} alt={film.name} width="280" height="175"/>
-        </div>
-        <h3 className="small-film-card__title">
-          <Link className="small-film-card__link" to={`/films/${film.id}`}>{film.name}</Link>
-        </h3>
-      </>}
-    </article>);
-}
+      <div className="small-film-card__image">
+        {isPlaying
+          ? <Player videoSrc={props.film.previewVideoLink} posterImageSrc={props.film.posterImage} muted />
+          : <img src={props.film.posterImage} alt={props.film.name} width="280" height="175" />}
+      </div>
+      <h3 className="small-film-card__title">
+        <Link to={`/films/${props.film.id}`} className="small-film-card__link">{props.film.name}</Link>
+      </h3>
+    </article>
+  );
+};
